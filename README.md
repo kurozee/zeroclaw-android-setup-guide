@@ -5,7 +5,7 @@
 ## 📱 Prerequisites
 ```
 - Samsung Galaxy Note 20 Ultra (12GB RAM) / OR any Android Phone
-- Termux (F-Droid version) or from PlayStore
+- Termux (F-Droid version recommended, PlayStore OK)  
 - Telegram app
 - OpenAI API key (optional: Ollama local)
 ```
@@ -39,16 +39,17 @@ export PATH="$HOME/bin:$PATH"
 # ZeroClaw Native
 alias zeroclaw="~/bin/zeroclaw"
 alias zeroclaw-stop="pkill -f zeroclaw"
-alias zeroclaw-start="nohup zeroclaw daemon > ~/.zeroclaw/daemon.out 2>&1 &"
-alias zeroclaw-restart="zeroclaw-stop & sleep 3 && zeroclaw-start"
+alias zeroclaw-start="termux-wake-lock && nohup zeroclaw daemon > ~/.zeroclaw/daemon.out 2>&1 &"
+alias zeroclaw-restart="zeroclaw-stop && sleep 3 && zeroclaw-start"
 EOF
 
 # Auto-boot (survives reboot)
 mkdir -p ~/.termux/boot
 
-# Auto-start script
+# Auto-start script (with PATH)
 cat > ~/.termux/boot/zeroclaw << 'EOF'
 #!/data/data/com.termux/files/usr/bin/sh
+export PATH="$HOME/bin:$PATH"
 sleep 10
 termux-wake-lock
 ~/bin/zeroclaw daemon &
@@ -64,7 +65,7 @@ zeroclaw onboard
 ```
 ```
 Provider: openai  (API key)
-Channel: telegram (BotFather token)
+Channel: telegram (BotFather token) 
 Users: * or YOUR_ID
 Model: gpt-4o-mini
 ```
@@ -79,7 +80,7 @@ tail -f ~/.zeroclaw/daemon.out  # "listening for message.."
 ```
 Telegram → "hello" → "Hello! I'm ZeroClaw..."
 "Write Sabah weather scraper" → Python script delivered
-Close Termux → Bot still replies
+Close Termux → Bot still replies  
 Reboot phone → Auto-revives
 ```
 
@@ -102,7 +103,7 @@ Models: gemma2:2b, phi3:3b (offline genius)
 ## 📊 Monitoring & Commands
 ```bash
 zeroclaw --version      # Status
-zeroclaw doctor         # Health
+zeroclaw doctor         # Health  
 zeroclaw-restart        # Restart
 zeroclaw-stop           # Stop daemon
 zeroclaw-start          # Start daemon
@@ -116,7 +117,7 @@ ps aux | grep zeroclaw  # PID check
 ~/bin/zeroclaw                  # Native binary (15MB)
 ~/.zeroclaw/config.toml         # OpenAI/Telegram keys
 ~/.zeroclaw/daemon.out          # Live logs
-~/.zeroclaw/sessions/           # Chat history
+~/.zeroclaw/sessions/           # Chat history  
 ~/.termux/boot/zeroclaw         # Auto-start
 ```
 
@@ -124,7 +125,7 @@ ps aux | grep zeroclaw  # PID check
 | Symptom | Solution |
 |---------|----------|
 | Bot silent | `tail daemon.out` + `allowed_users=*` |
-| Dies sleep | `termux-wake-lock` always |
+| Dies sleep | `zeroclaw-start` (has wake-lock) |
 | htop 1 core | Android gating—loads under stress |
 | `line 1: Not:` | `git clone` → `cp bin/zeroclaw ~/bin/` |
 
@@ -143,6 +144,4 @@ Uptime: 99.9% (wake-lock)
 - [x] Auto-restart on boot
 - [ ] Optional: Ollama offline
 
-**Save**: `cat > ~/zeroclaw-android-setup.md << 'EOF'` → paste → **Ctrl+D**.
-
-**Your pocket supercomputer is operational.**
+**Production-ready perfection.** Deploy anywhere! 🚀
