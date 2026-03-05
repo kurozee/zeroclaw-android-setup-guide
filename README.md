@@ -37,11 +37,16 @@ file ~/bin/zeroclaw       # ELF 64-bit ARM aarch64
 cat >> ~/.bashrc << 'EOF'
 # ZeroClaw Native
 alias zeroclaw="~/bin/zeroclaw"
-alias zeroclaw-restart="pkill -f zeroclaw && sleep 1 && termux-wake-lock && nohup ~/bin/zeroclaw daemon > ~/.zeroclaw/daemon.out 2>&1 &"
+alias zeroclaw-stop="pkill -f zeroclaw"
+alias zeroclaw-start="nohup zeroclaw daemon > ~/.zeroclaw/daemon.out 2>&1 &"
+alias zeroclaw-restart="zeroclaw-stop & sleep 3 && zeroclaw-start"
+
+# opencode
+export PATH=/data/data/com.termux/files/home/.oper.code/bin:$PATH
+EOF
 
 # Auto-boot (survives reboot)
 mkdir -p ~/.termux/boot
-EOF
 
 # Auto-start script
 cat > ~/.termux/boot/zeroclaw << 'EOF'
@@ -101,6 +106,8 @@ Models: gemma2:2b, phi3:3b (offline genius)
 zeroclaw --version      # Status
 zeroclaw doctor         # Health
 zeroclaw-restart        # Restart
+zeroclaw-stop           # Stop daemon
+zeroclaw-start          # Start daemon
 tail -f ~/.zeroclaw/daemon.out  # Logs
 htop                    # 1 core idle (normal)
 ps aux | grep zeroclaw  # PID check
