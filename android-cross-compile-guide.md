@@ -199,5 +199,3 @@ fi
 Use that suggestion when configuring your WSL build environment so that the binaries you produce will run on your device and most reasonably recent Android versions. [api.suwish](http://api.suwish.com/android/ndk/guides/abis.html)
 
 ***
-
-If you tell me your planned repo layout (e.g. `./android/`, `./rust/`), I can add a short “Makefile + CI” section to this guide that wires `cargo android build` into targets like `make android-aarch64`.  
